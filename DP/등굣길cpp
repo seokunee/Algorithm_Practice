@@ -1,0 +1,48 @@
+// DP 등굣길
+#include <string>
+#include <vector>
+#include <cstring>
+#include <iostream>
+
+#define mod 1000000007
+
+using namespace std;
+
+long long map[101][101];
+
+int solution(int m, int n, vector<vector<int>> puddles)
+{
+    int answer = 0;
+
+    memset(map, 0, sizeof(map));
+    map[1][1] = 1;
+    for (auto pud : puddles)
+    {
+        map[pud[1]][pud[0]] = -1;
+    }
+
+    for (int i = 1; i <= n; i++)
+    {
+        for (int k = 1; k <= m; k++)
+        {
+            if (map[i][k] == -1 || (i == 1 && k == 1))
+                continue;
+
+            long long left = 0;
+            long long up = 0;
+
+            if (k - 1 >= 1 && map[i][k - 1] != -1)
+            {
+                left = map[i][k - 1];
+            }
+            if (i - 1 >= 1 && map[i - 1][k] != -1)
+            {
+                up = map[i - 1][k];
+            }
+
+            map[i][k] = (left + up) % mod;
+        }
+    }
+    answer = map[n][m];
+    return answer;
+}
